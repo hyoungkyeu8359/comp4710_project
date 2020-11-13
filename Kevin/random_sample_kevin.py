@@ -3,8 +3,6 @@ import numpy as np
 import pathlib
 import sys
 
-# 0. Create 'corona-tweets' folder and save your csv files in there.
-
 # 1. List of the name of directories to be created
 directories = [
     'ready-corona-tweets',
@@ -12,7 +10,7 @@ directories = [
 ]
 
 # 2. Create directories as needed, if not exists
-current_path = "your_path_to_random_samply.py" # Path to the random_sample.py script
+current_path = "E:/Github/comp4710_project/Kevin/" # Path to the random_sample.py script
 
 for dir in directories: 
     try:
