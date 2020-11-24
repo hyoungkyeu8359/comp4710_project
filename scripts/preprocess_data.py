@@ -26,7 +26,12 @@ current_path = "G:\\COMP4710_Project\\"
 # They are used as a utility to pre process data for stop words, frequent, rare and lemmatize words
 # Author sudalairajkumar
 def remove_stopwords(text):
-    STOPWORDS = set(stopwords.words('english'))
+    first_pronouns = ["i", "me", "my", "mine", "our", "ours", "us", "we"]
+    stopwords_filtered = [x for x in stopwords.words('english') if x not in first_pronouns]
+    STOPWORDS = set(stopwords_filtered)
+
+    # Original stopwords without First person pronouns filtered
+    # STOPWORDS = set(stopwords.words('english'))
     return " ".join([word for word in str(text).split() if word not in STOPWORDS])
 
 def remove_freqwords(text):
