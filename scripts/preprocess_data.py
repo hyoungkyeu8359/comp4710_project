@@ -8,30 +8,29 @@ import os
 import shutil
 import nltk
 from collections import Counter
-from slang_converter.slang_script import translator
+from slang_script import translator
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from spellchecker import SpellChecker
+# from spellchecker import SpellChecker
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
 
 
 
-
-
 #Current directory
-current_path = "G:\\COMP4710_Project\\" 
+current_path = "../" 
+newDir = "swcwang-final-dataset/"
 
 # Following five functions are taken from https://www.kaggle.com/sudalairajkumar/getting-started-with-text-preprocessing.
 # They are used as a utility to pre process data for stop words, frequent, rare and lemmatize words
 # Author sudalairajkumar
 def remove_stopwords(text):
-    first_pronouns = ["i", "me", "my", "mine", "our", "ours", "us", "we"]
-    stopwords_filtered = [x for x in stopwords.words('english') if x not in first_pronouns]
-    STOPWORDS = set(stopwords_filtered)
+    # first_pronouns = ["i", "me", "my", "mine", "our", "ours", "us", "we"]
+    # stopwords_filtered = [x for x in stopwords.words('english') if x not in first_pronouns]
+    # STOPWORDS = set(stopwords_filtered)
 
     # Original stopwords without First person pronouns filtered
-    # STOPWORDS = set(stopwords.words('english'))
+    STOPWORDS = set(stopwords.words('english'))
     return " ".join([word for word in str(text).split() if word not in STOPWORDS])
 
 def remove_freqwords(text):
@@ -67,37 +66,37 @@ def correct_spellings(text):
 csv_files = [1, 2, 3, 10, 16, 23, 30, 37, 128, 135, 142, 149, 156, 163,170, 177, 184,191, 198, 205 ] 
 
 #Put them in this new directory. Delete the directory if it exists already
-newDir = "cleaned_data"
+all_files = ["tweets_combined_target_1", "tweets_combined_target_0", "tweets_combined"]
 shutil.rmtree(current_path + newDir, ignore_errors=True)
 os.makedirs(current_path + newDir)
 
+target_column = "tweet_processed"
 #For each csv file do cleaning on the data texts
-for file in csv_files:
-    file = str(file)
+for file in all_files:
     print("Pre-processing for "+file+".csv")
-    df = pd.read_csv('G:\\COMP4710_Project\\preprocessed_data\\preproc_tweets-' + file + '.csv',lineterminator='\n')
+    df = pd.read_csv(current_path + 'swcwang-combined-dataset/' + file + '.csv',lineterminator='\n')
     print('Starting cleaning')
-    df["text1"] =  df["text"].map(lambda x: p.clean(str(x)))
+    df[target_column] =  df["tweet"].map(lambda x: p.clean(str(x)))
     print('Finished cleaning. Starting lowercase')
-    df["text1"] =  df["text1"].map(lambda x: x.lower())
+    df[target_column] =  df[target_column].map(lambda x: x.lower())
     print('Finished lowercase. Starting punctation')
-    df["text1"] =  df["text1"].map(lambda x: x.translate(x.maketrans('', '', string.punctuation)))
+    df[target_column] =  df[target_column].map(lambda x: x.translate(x.maketrans('', '', string.punctuation)))
     print('Finished punctuation. Starting acronym')
-    df["text1"] =  df["text1"].map(lambda x: translator(str(x)))
+    df[target_column] =  df[target_column].map(lambda x: translator(str(x)))
     print('Finished acronym. Starting strip')
-    df["text1"] =  df["text1"].map(lambda x: x.strip())
-    print('Finished strip. Starting stop words')
-    df["text1"] =  df["text1"].map(lambda x: remove_stopwords(x))
-    print('Finished stopwords. Starting freqwords')
-    df["text1"] = df["text1"].map(lambda x: remove_freqwords(x))
-    print('Finished freqwords. Starting rare words')
-    df["text1"] = df["text1"].map(lambda x: remove_rarewords(x))
+    df[target_column] =  df[target_column].map(lambda x: x.strip())
+    # print('Finished strip. Starting stop words')
+    # df[target_column] =  df[target_column].map(lambda x: remove_stopwords(x))
+    # print('Finished stopwords. Starting freqwords')
+    # df[target_column] = df[target_column].map(lambda x: remove_freqwords(x))
+    # print('Finished freqwords. Starting rare words')
+    # df[target_column] = df[target_column].map(lambda x: remove_rarewords(x))
     # WE COULD USE THIS BUT IT TAKES SO LONG!
     # df["text1"] = df["text1"].apply(lambda x: correct_spellings(x))
     print('Finished rare words. Starting lemmatize')
-    df["text1"] = df["text1"].map(lambda x: lemmatize_words(x))
-    print('Finished lemmatize word. Starting tokenization')
-    df["text1"] = df["text1"].map(lambda x: word_tokenize(x))
-    print('Finished tokenization')
-    df.to_csv('G:\\COMP4710_Project\\cleaned_data\\cleaned_data-' + file + '.csv', index=False)
+    df[target_column] = df[target_column].map(lambda x: lemmatize_words(x))
+    # print('Finished lemmatize word. Starting tokenization')
+    # df["text1"] = df["text1"].map(lambda x: word_tokenize(x))
+    # print('Finished tokenization')
+    df.to_csv(current_path + newDir + file + '.csv', index=False)
 

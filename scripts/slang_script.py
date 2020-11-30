@@ -9,7 +9,7 @@ def translator(user_string):
     j = 0
     for _str in user_string:
         # File path which consists of Abbreviations.
-        fileName = "G:\\COMP4710_Project\\slang_converter\slang.txt"
+        fileName = "./slang.txt"
         # File Access mode [Read Mode]
         accessMode = "r"
         with open(fileName, accessMode) as myCSVfile:
