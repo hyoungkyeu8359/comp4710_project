@@ -10,10 +10,13 @@ import re
 from sklearn.model_selection import train_test_split
 from sklearn import svm
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+import pickle
 
 #gets tweets dataframe to work with
 my_path = os.path.dirname( __file__) # path of this program
-df_path = my_path + "/../swcwang-final-dataset/tweets_combined_labeled1.csv"
+# df_path = my_path + "/../swcwang-final-dataset/tweets_combined_labeled1.csv"
+
+df_path = "./../swcwang-final-dataset/tweets_combined_labeled1.csv"
 df = pd.read_csv(df_path)
 
 tweets = df.iloc[:, 0].values
@@ -54,6 +57,7 @@ MAX_DF = 0.8 #max occurence (percentage) in the documents
 MAX_FEATURES = 2500 #most frequently occurring words
 
 vectorizer = TfidfVectorizer (max_features=MAX_FEATURES, min_df=MIN_DF, max_df=MAX_DF, stop_words=STOPWORDS)
+tfidf = vectorizer.fit(processed_features)
 processed_features = vectorizer.fit_transform(processed_features).toarray()
 
 
@@ -66,6 +70,13 @@ text_classifier = svm.SVC(C=100, kernel='rbf', degree=1, gamma='auto')
 text_classifier.fit(X_train, y_train)
 
 
+#save trained model
+trained_model_path = './../trained-model/svm-model.sav'
+vectorizer_path = './../trained-model/vectorizer/svm-vectorizer.sav'
+pickle.dump(text_classifier, open(trained_model_path, 'wb'))
+pickle.dump(tfidf, open(vectorizer_path, 'wb'))
+
+
 #making predictions and evaluating the model
 predictions = text_classifier.predict(X_test)
 
@@ -73,3 +84,8 @@ predictions = text_classifier.predict(X_test)
 print(confusion_matrix(y_test,predictions))
 print(classification_report(y_test,predictions))
 print(accuracy_score(y_test, predictions))
+
+# loaded_model = pickle.load(open(filename, 'rb'))
+# X_train, X_test, y_train, y_test = train_test_split(processed_features, labels, test_size=0.5, random_state=0)
+# result = loaded_model.score(X_test, y_test)
+# print("Test score: {0:.6f} %".format(100 * result))

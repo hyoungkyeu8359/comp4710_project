@@ -10,10 +10,13 @@ import re
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from sklearn.naive_bayes import MultinomialNB
+import pickle
 
 #gets tweets dataframe to work with
 my_path = os.path.dirname( __file__) # path of this program
-df_path = my_path + "/../swcwang-final-dataset/tweets_combined_labeled1.csv"
+# df_path = my_path + "./../swcwang-final-dataset/tweets_combined_labeled1.csv"
+
+df_path = "./../swcwang-final-dataset/tweets_combined_labeled1.csv"
 df = pd.read_csv(df_path)
 
 tweets = df.iloc[:, 0].values
@@ -54,6 +57,7 @@ MAX_DF = 0.8 #max occurence (percentage) in the documents
 MAX_FEATURES = 2500 #most frequently occurring words
 
 vectorizer = TfidfVectorizer (max_features=MAX_FEATURES, min_df=MIN_DF, max_df=MAX_DF, stop_words=STOPWORDS)
+tfidf = vectorizer.fit(processed_features)
 processed_features = vectorizer.fit_transform(processed_features).toarray()
 
 
@@ -64,6 +68,12 @@ X_train, X_test, y_train, y_test = train_test_split(processed_features, labels, 
 #training the model
 text_classifier = MultinomialNB()
 text_classifier.fit(X_train, y_train)
+
+#save trained model
+trained_model_path = './../trained-model/naive-baiyes-model.sav'
+vectorizer_path = './../trained-model/vectorizer/naive-baiyes-vectorizer.sav'
+pickle.dump(text_classifier, open(trained_model_path, 'wb'))
+pickle.dump(tfidf, open(vectorizer_path, 'wb'))
 
 
 #making predictions and evaluating the model
