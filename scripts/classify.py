@@ -12,6 +12,10 @@ from sklearn import svm
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import pickle
 
+USE_SVM = False
+USE_NAIVE_BAIYES = True
+USE_RANDOM_FOREST = False
+
 svm_path = './../trained-model/svm-model.sav'
 naive_bayes_path = './../trained-model/naive-baiyes-model.sav'
 random_forest_path = './../trained-model/random-forest-model.sav'
@@ -26,28 +30,30 @@ df = pd.read_csv(df_path)
 tweets = df.iloc[:, 0].values
 labels = df.iloc[:, 1].values
 
+print("Dataset size: ", tweets.size)
+
 # preprocess data to clean it
-processed_features = []
+tweets_dataset = []
 for sentence in range(0, len(tweets)):
     # Remove all the special characters
-    processed_feature = re.sub(r'\W', ' ', str(tweets[sentence]))
+    processed_tweet = re.sub(r'\W', ' ', str(tweets[sentence]))
 
     # remove all single characters
-    processed_feature = re.sub(r'\s+[a-zA-Z]\s+', ' ', processed_feature)
+    processed_tweet = re.sub(r'\s+[a-zA-Z]\s+', ' ', processed_tweet)
 
     # Remove single characters from the start
-    processed_feature = re.sub(r'\^[a-zA-Z]\s+', ' ', processed_feature)
+    processed_tweet = re.sub(r'\^[a-zA-Z]\s+', ' ', processed_tweet)
 
     # Substituting multiple spaces with single space
-    processed_feature = re.sub(r'\s+', ' ', processed_feature, flags=re.I)
+    processed_tweet = re.sub(r'\s+', ' ', processed_tweet, flags=re.I)
 
     # Removing prefixed 'b'
-    processed_feature = re.sub(r'^b\s+', '', processed_feature)
+    processed_tweet = re.sub(r'^b\s+', '', processed_tweet)
 
     # Converting to Lowercase
-    processed_feature = processed_feature.lower()
+    processed_tweet = processed_tweet.lower()
 
-    processed_features.append(processed_feature)
+    tweets_dataset.append(processed_tweet)
 
 # ================== Classification Code start here ==================
 stopwords_ = stopwords.words('english')
@@ -61,27 +67,40 @@ MAX_FEATURES = 2500  # most frequently occurring words
 
 vectorizer = TfidfVectorizer(
     max_features=MAX_FEATURES, min_df=MIN_DF, max_df=MAX_DF, stop_words=STOPWORDS)
-tfidf = vectorizer.fit(processed_features)
-processed_features = vectorizer.fit_transform(processed_features).toarray()
+tfidf = vectorizer.fit(tweets_dataset)
+vectorized_tweets = vectorizer.fit_transform(tweets_dataset).toarray()
 
-X_train, X_test, y_train, y_test = train_test_split(
-    processed_features, labels, test_size=0.9, random_state=0)
+D_START = 140
+D_END = 160
 
 # classification using SVM
-svm_model = pickle.load(open(svm_path, 'rb'))
-predict = svm_model.predict(X_test[:20])
-print("\nSVM Prediciton: ")
-print(predict)
+if USE_SVM:
+    svm_model = pickle.load(open(svm_path, 'rb'))
+    predict = svm_model.predict(vectorized_tweets)
+    print("\nSVM Prediciton: ")
+    depressed_tweets = np.asarray(np.where(predict == 1))
+    print(depressed_tweets.size)
+    # score = svm_model.score(vectorized_tweets, labels)
+    # print(score)
 
 
 # classification using Naive Bayes
-naive_bayes_model = pickle.load(open(naive_bayes_path, 'rb'))
-predict = naive_bayes_model.predict(X_test[:20])
-print("\nNaive Bayes Prediciton: ")
-print(predict)
+if USE_NAIVE_BAIYES:
+    naive_bayes_model = pickle.load(open(naive_bayes_path, 'rb'))
+    predict = naive_bayes_model.predict(vectorized_tweets)
+    print("\nNaive Bayes Prediciton: ")
+    depressed_tweets = np.asarray(np.where(predict == 1))
+    print(depressed_tweets.size)
+    # score = naive_bayes_model.score(vectorized_tweets, labels)
+    # print(score)
+
 
 # classification using Random Forest
-random_forest__model = pickle.load(open(random_forest_path, 'rb'))
-print("\nRandom Forest Prediciton: ")
-predict = random_forest__model.predict(X_test[:20])
-print(predict)
+if USE_RANDOM_FOREST:
+    random_forest__model = pickle.load(open(random_forest_path, 'rb'))
+    predict = random_forest__model.predict(vectorized_tweets)
+    print("\nRandom Forest Prediciton: ")
+    depressed_tweets = np.asarray(np.where(predict == 1))
+    print(depressed_tweets.size)
+    # score = random_forest__model.score(vectorized_tweets, labels)
+    # print(score)
