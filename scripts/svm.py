@@ -72,9 +72,9 @@ text_classifier.fit(X_train, y_train)
 
 #save trained model
 trained_model_path = './../trained-model/svm-model.sav'
-vectorizer_path = './../trained-model/vectorizer/svm-vectorizer.sav'
 pickle.dump(text_classifier, open(trained_model_path, 'wb'))
-pickle.dump(tfidf, open(vectorizer_path, 'wb'))
+# vectorizer_path = './../trained-model/vectorizer/svm-vectorizer.sav'
+# pickle.dump(tfidf, open(vectorizer_path, 'wb'))
 
 
 #making predictions and evaluating the model
@@ -84,8 +84,3 @@ predictions = text_classifier.predict(X_test)
 print(confusion_matrix(y_test,predictions))
 print(classification_report(y_test,predictions))
 print(accuracy_score(y_test, predictions))
-
-# loaded_model = pickle.load(open(filename, 'rb'))
-# X_train, X_test, y_train, y_test = train_test_split(processed_features, labels, test_size=0.5, random_state=0)
-# result = loaded_model.score(X_test, y_test)
-# print("Test score: {0:.6f} %".format(100 * result))

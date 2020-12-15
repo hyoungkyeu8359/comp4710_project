@@ -13,13 +13,12 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 import pickle
 
 svm_path = './../trained-model/svm-model.sav'
-svm_vectorizer_path = './../trained-model/vectorizer/svm-vectorizer.sav'
-
 naive_bayes_path = './../trained-model/naive-baiyes-model.sav'
-naive_bayes_vectorizer_path = './../trained-model/vectorizer/naive-baiyes-vectorizer.sav'
-
 random_forest_path = './../trained-model/random-forest-model.sav'
-random_forest_vectorizer_path = './../trained-model/vectorizer/random-forest-vectorizer.sav'
+
+# svm_vectorizer_path = './../trained-model/vectorizer/svm-vectorizer.sav'
+# naive_bayes_vectorizer_path = './../trained-model/vectorizer/naive-baiyes-vectorizer.sav'
+# random_forest_vectorizer_path = './../trained-model/vectorizer/random-forest-vectorizer.sav'
 
 df_path = "./../swcwang-final-dataset/tweets_combined_labeled1.csv"
 df = pd.read_csv(df_path)

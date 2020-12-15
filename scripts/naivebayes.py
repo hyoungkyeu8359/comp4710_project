@@ -71,9 +71,9 @@ text_classifier.fit(X_train, y_train)
 
 #save trained model
 trained_model_path = './../trained-model/naive-baiyes-model.sav'
-vectorizer_path = './../trained-model/vectorizer/naive-baiyes-vectorizer.sav'
 pickle.dump(text_classifier, open(trained_model_path, 'wb'))
-pickle.dump(tfidf, open(vectorizer_path, 'wb'))
+# vectorizer_path = './../trained-model/vectorizer/naive-baiyes-vectorizer.sav'
+# pickle.dump(tfidf, open(vectorizer_path, 'wb'))
 
 
 #making predictions and evaluating the model
