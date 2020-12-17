@@ -53,9 +53,9 @@ stopwords_.extend(["im", "ive"])
 STOPWORDS = set(stopwords_)
 
 # This is getting the features using tf-idf
-MIN_DF = 10 #min # fords occurence
-MAX_DF = 0.8 #max occurence (percentage) in the documents
-MAX_FEATURES = 2500 #most frequently occurring words
+MIN_DF = 5 #min # fords occurence
+MAX_DF = 0.5 #max occurence (percentage) in the documents
+MAX_FEATURES = 1500 #most frequently occurring words
 
 vectorizer = TfidfVectorizer (max_features=MAX_FEATURES, min_df=MIN_DF, max_df=MAX_DF, stop_words=STOPWORDS)
 tfidf = vectorizer.fit(processed_features)

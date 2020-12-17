@@ -52,21 +52,21 @@ stopwords_.extend(["im", "ive"])
 STOPWORDS = set(stopwords_)
 
 # This is getting the features using tf-idf
-MIN_DF = 10 #min # fords occurence
-MAX_DF = 0.8 #max occurence (percentage) in the documents
-MAX_FEATURES = 2500 #most frequently occurring words
+MIN_DF = 5 #min # fords occurence
+MAX_DF = 0.5 #max occurence (percentage) in the documents
+MAX_FEATURES = 1500 #most frequently occurring words
 
 vectorizer = TfidfVectorizer (max_features=MAX_FEATURES, min_df=MIN_DF, max_df=MAX_DF, stop_words=STOPWORDS)
 tfidf = vectorizer.fit(processed_features)
 processed_features = vectorizer.fit_transform(processed_features).toarray()
-
+print("Matrix dimension: ", processed_features.shape)
 
 #dividing Data into training and test sets
-X_train, X_test, y_train, y_test = train_test_split(processed_features, labels, test_size=0.2, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(processed_features, labels, test_size=0.2)
 
 
 #training the model
-text_classifier = svm.SVC(C=100, kernel='rbf', degree=1, gamma='auto')
+text_classifier = svm.SVC(C=1, kernel='linear')
 text_classifier.fit(X_train, y_train)
 
 
