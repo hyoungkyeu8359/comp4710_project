@@ -20,11 +20,14 @@ svm_path = './../trained-model/svm-model.sav'
 naive_bayes_path = './../trained-model/naive-baiyes-model-1.sav'
 random_forest_path = './../trained-model/random-forest-model.sav'
 
-# svm_vectorizer_path = './../trained-model/vectorizer/svm-vectorizer.sav'
+svm_vectorizer_path = './../trained-model/vectorizer/svm-vectorizer.sav'
 # naive_bayes_vectorizer_path = './../trained-model/vectorizer/naive-baiyes-vectorizer.sav'
 # random_forest_vectorizer_path = './../trained-model/vectorizer/random-forest-vectorizer.sav'
 
-file_num = str(1)
+csv_files = [1, 2, 3, 10, 16, 23, 30, 37, 44, 51, 58, 65, 72, 79, 86, 93, 100,
+             107, 114, 121, 128, 135, 142, 149, 156, 163, 170, 177, 184, 191, 198, 205]
+
+file_num = str(170)
 df_path = "./../cleaned-data/cleaned-data-"+file_num+".csv"
 df = pd.read_csv(df_path, lineterminator='\n')
 
@@ -79,16 +82,19 @@ MIN_DF = 5  # min # fords occurence
 MAX_DF = 0.5  # max occurence (percentage) in the documents
 MAX_FEATURES = 1500  # most frequently occurring words
 
-vectorizer = TfidfVectorizer(
-    max_features=MAX_FEATURES, min_df=MIN_DF, max_df=MAX_DF, stop_words=STOPWORDS)
-tfidf = vectorizer.fit(tweets_dataset)
-vectorized_tweets = vectorizer.fit_transform(tweets_dataset)
-print(vectorized_tweets.shape)
-vectorized_tweets = vectorized_tweets.toarray()
+# vectorizer = TfidfVectorizer(
+#     max_features=MAX_FEATURES, min_df=MIN_DF, max_df=MAX_DF, stop_words=STOPWORDS)
+# tfidf = vectorizer.fit(tweets_dataset)
+# vectorized_tweets = vectorizer.transform(tweets_dataset)
+# print(vectorized_tweets.shape)
+# vectorized_tweets = vectorized_tweets.toarray()
 
 # classification using SVM
 if USE_SVM:
     svm_model = pickle.load(open(svm_path, 'rb'))
+    svm_vectorizer = pickle.load(open(svm_vectorizer_path, 'rb'))
+    vectorized_tweets = svm_vectorizer.transform(tweets_dataset).toarray()
+
     predict = svm_model.predict(vectorized_tweets)
     print("\nSVM Prediciton: ")
 
@@ -114,7 +120,7 @@ if USE_NAIVE_BAIYES:
     naive_bayes_model = pickle.load(open(naive_bayes_path, 'rb'))
     print(naive_bayes_model)
     predict = naive_bayes_model.predict(vectorized_tweets)
-    
+
     depressed_index = np.where(predict == 1)
     depressed_index = np.asarray(depressed_index).flatten()
 
@@ -138,7 +144,7 @@ if USE_RANDOM_FOREST:
     random_forest__model = pickle.load(open(random_forest_path, 'rb'))
     predict = random_forest__model.predict(vectorized_tweets)
     print("\nRandom Forest Prediciton: ")
-    
+
     depressed_index = np.where(predict == 1)
     depressed_index = np.asarray(depressed_index).flatten()
 

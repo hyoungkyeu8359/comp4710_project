@@ -73,8 +73,8 @@ text_classifier.fit(X_train, y_train)
 #save trained model
 trained_model_path = './../trained-model/svm-model.sav'
 pickle.dump(text_classifier, open(trained_model_path, 'wb'))
-# vectorizer_path = './../trained-model/vectorizer/svm-vectorizer.sav'
-# pickle.dump(tfidf, open(vectorizer_path, 'wb'))
+vectorizer_path = './../trained-model/vectorizer/svm-vectorizer.sav'
+pickle.dump(tfidf, open(vectorizer_path, 'wb'))
 
 
 #making predictions and evaluating the model
