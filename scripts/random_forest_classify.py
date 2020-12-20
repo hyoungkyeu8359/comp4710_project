@@ -15,14 +15,12 @@ import pickle
 
 #gets tweets dataframe to work with
 my_path = os.path.dirname( __file__) # path of this program
-df_path = my_path + "/../swcwang-final-dataset/tweets_combined_labeled1.csv"
+df_path = my_path + "/../cleaned-data/cleaned-data-1.csv"
 
-#df_path = "./../swcwang-final-dataset/tweets_combined_labeled1.csv"
 df = pd.read_csv(df_path)
 
-tweets = df.iloc[:, 0].values
-labels = df.iloc[:, 1].values
-
+orig_tweets = df.iloc[:, -1].values
+tweets = df.iloc[:, -1].values
 
 #preprocess data to clean it
 processed_features = []
@@ -54,38 +52,26 @@ STOPWORDS = set(stopwords_)
 
 # This is getting the features using tf-idf
 MIN_DF = 1 #min occurence (percentage) in the document
-MAX_DF = 0.7 #max occurence (percentage) in the documents
+MAX_DF = 0.6 #max occurence (percentage) in the documents
 MAX_FEATURES = 2500 #most frequently occurring words
 
 vectorizer = TfidfVectorizer (max_features=MAX_FEATURES, min_df=MIN_DF, max_df=MAX_DF, stop_words=STOPWORDS)
 tfidf = vectorizer.fit(processed_features)
 processed_features = vectorizer.fit_transform(processed_features).toarray()
 
-
-#dividing Data into training and test sets
-X_train, X_test, y_train, y_test = train_test_split(processed_features, labels, test_size=0.2, random_state=0)
-
-
-#training the model
-text_classifier = RandomForestClassifier(n_estimators=500, random_state=0)
-text_classifier.fit(X_train, y_train)
-
-#save trained model
+#load trained model
 trained_model_path = my_path + '/../trained-model/random-forest-model.pkl'
-with open(trained_model_path, 'wb') as file:
-    pickle.dump(text_classifier, file)
+with open(trained_model_path, 'rb') as file:
+    text_classifier = pickle.load(file)
 
-# pickle.dump(text_classifier, open(trained_model_path, 'wb'))
-# vectorizer_path = './../trained-model/vectorizer/random-forest-vectorizer.sav'
-# pickle.dump(tfidf, open(vectorizer_path, 'wb'))
+#making predictions
+predictions = text_classifier.predict(processed_features)
 
+orig_tweets = np.array(orig_tweets)
+labels = np.array(predictions)
 
-#making predictions and evaluating the model
-predictions = text_classifier.predict(X_test)
-
-
-print(confusion_matrix(y_test,predictions))
-print(classification_report(y_test,predictions))
-print(accuracy_score(y_test, predictions))
+df = pd.DataFrame({"tweets" : orig_tweets, "labels" : labels})
+df.sort_values(by=['labels'], inplace=True)
+df.to_csv(my_path + "/predicted.csv", index=False)
 
 
