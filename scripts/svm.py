@@ -17,6 +17,7 @@ my_path = os.path.dirname( __file__) # path of this program
 # df_path = my_path + "/../swcwang-final-dataset/tweets_combined_labeled1.csv"
 
 df_path = "./../swcwang-final-dataset/tweets_combined_labeled1.csv"
+df_path = "./../preprocessed/combined_text.csv"
 df = pd.read_csv(df_path)
 
 tweets = df.iloc[:, 0].values
