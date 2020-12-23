@@ -1,0 +1,14 @@
+Elapsed time to train the model (in seconds): 7026.242794
+Confusion matrix:
+[[10344   169]
+ [ 3944 25465]]
+Classification report:
+              precision    recall  f1-score   support
+
+           0       0.72      0.98      0.83     10513
+           1       0.99      0.87      0.93     29409
+
+    accuracy                           0.90     39922
+   macro avg       0.86      0.92      0.88     39922
+weighted avg       0.92      0.90      0.90     39922
+Prediction score: 0.896974
