@@ -27,7 +27,7 @@ training_dataset = [post.replace('\n', ' ').replace(
     '  ', ' ').replace('“', '').replace('”', '') for post in training_dataset]
 training_dataset = [post.lower() for post in training_dataset]
 
-predicted_dir = "./../predicted-tweets/"
+predicted_dir = "./../final_combine_dataset_prediction/"
 
 csv_files = [1, 2, 3, 10, 23, 30, 37, 44, 51, 58, 65, 72, 79, 86, 93, 100,
              107, 114, 121, 128, 135, 142, 149, 156, 163, 170, 177, 184, 191, 198, 205]
