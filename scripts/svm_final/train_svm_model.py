@@ -1,3 +1,6 @@
+#For the classification we use an algorithm from scikit-learn
+#https://scikit-learn.org/stable/modules/naive_bayes.html 
+
 import numpy as np
 import pandas as pd
 import re
