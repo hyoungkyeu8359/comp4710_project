@@ -1,3 +1,8 @@
+"""
+Author: Thomas Buhrmann
+https://buhrmann.github.io/tfidf-analysis.html
+"""
+
 import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer, TfidfTransformer
@@ -46,12 +51,6 @@ def extract_topn_from_vector(feature_names, sorted_items, topn=10):
         results[feature_vals[idx]] = score_vals[idx]
 
     return results
-
-
-"""
-Author: Thomas Buhrmann
-https://buhrmann.github.io/tfidf-analysis.html
-"""
 
 
 def top_tfidf_feats(row, features, top_n=25):
