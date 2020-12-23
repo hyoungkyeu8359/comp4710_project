@@ -57,6 +57,17 @@ train_model.py is a training model for SVM for final_comvbined.csv
 
 tweet_wordcloud.py is a graph to represent the prediction results from the trained model we get from train_model.py
 
+# Dataset Link:
+Since the datasets are too large for GitHub, we provide a Google Drive link for the datasets.
+
+https://drive.google.com/drive/u/1/folders/1CqOYB3iVp3dovAf0gpCM3n_jxUZ_WVsz
+
+combined folder includes our training dataset
+
+tfidf_combined folder includes the testing dataset for predictions.
+
+
+
 
 
 
