@@ -1,3 +1,5 @@
+# AUTHOR OF THIS CODE IS: Daniel Low, used from - https://github.com/danielmlow/reddit
+# Some portion of code is written by Devin Efendy
 import string
 import os
 import sys
