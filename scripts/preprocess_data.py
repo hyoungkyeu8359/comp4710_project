@@ -20,7 +20,7 @@ from nltk.stem import WordNetLemmatizer
 current_path = "../"
 newDir = "cleaned-data/"
 
-# Following five functions are taken from https://www.kaggle.com/sudalairajkumar/getting-started-with-text-preprocessing.
+# Following two functions are taken from https://www.kaggle.com/sudalairajkumar/getting-started-with-text-preprocessing.
 # They are used as a utility to pre process data for stop words, frequent, rare and lemmatize words
 # Author sudalairajkumar
 
@@ -38,18 +38,6 @@ def remove_stopwords(text):
     return " ".join([word for word in str(text).split() if word not in STOPWORDS])
 
 
-def remove_freqwords(text):
-    cnt = Counter()
-    FREQWORDS = set([w for (w, wc) in cnt.most_common(10)])
-    return " ".join([word for word in str(text).split() if word not in FREQWORDS])
-
-
-def remove_rarewords(text):
-    cnt = Counter()
-    n_rare_words = 10
-    RAREWORDS = set([w for (w, wc) in cnt.most_common()[:-n_rare_words-1:-1]])
-    return " ".join([word for word in str(text).split() if word not in RAREWORDS])
-
 
 def lemmatize_words(text):
     lemmatizer = WordNetLemmatizer()
@@ -59,7 +47,6 @@ def lemmatize_words(text):
     return " ".join([lemmatizer.lemmatize(word, wordnet_map.get(pos[0], wordnet.NOUN)) for word, pos in pos_tagged_text])
 
 # Author of this function is sudalairajkumar and algorithm for spell checking by Peter Norvig
-
 
 def correct_spellings(text):
     spell = SpellChecker()
@@ -101,16 +88,10 @@ for file in all_files:
     df[target_column] = df[target_column].map(lambda x: x.strip())
     print('Finished strip. Starting stop words')
     df[target_column] = df[target_column].map(lambda x: remove_stopwords(x))
-    print('Finished stopwords. Starting freqwords')
-    df[target_column] = df[target_column].map(lambda x: remove_freqwords(x))
-    print('Finished freqwords. Starting rare words')
-    df[target_column] = df[target_column].map(lambda x: remove_rarewords(x))
     # WE COULD USE THIS BUT IT TAKES SO LONG!
     # df["text1"] = df["text1"].apply(lambda x: correct_spellings(x))
-    print('Finished rare words. Starting lemmatize')
+    print('Finished stop words. Starting lemmatize')
     df[target_column] = df[target_column].map(lambda x: lemmatize_words(x))
-    print('Finished lemmatize word. Starting tokenization')
-    # df["text1"] = df["text1"].map(lambda x: word_tokenize(x))
-    # print('Finished tokenization')
+
     df.to_csv(current_path + newDir + 'cleaned-data-' +
               str(file) + '.csv', index=False)
